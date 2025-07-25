@@ -143,3 +143,39 @@ When running the HA setup:
 3. **Zero Downtime**: Rolling updates possible
 4. **Scalability**: Easy to add more instances
 5. **Health Monitoring**: Automatic health checks and failover
+
+## Sample Applications
+
+This setup includes several sample WAR applications for testing:
+
+### 🌍 Hello World App
+- **URL**: http://localhost/hello-world/
+- **Features**: Basic web app with JSP pages, server info display
+- **Test JSP**: http://localhost/hello-world/test.jsp
+
+### 🚀 API Demo App  
+- **URL**: http://localhost/api-demo/
+- **Features**: REST API endpoints returning JSON
+- **Endpoints**:
+  - `/api-demo/api/time` - Current server time
+  - `/api-demo/api/info` - Server information
+  - `/api-demo/api/random` - Random data generator
+  - `/api-demo/api/headers` - Request headers
+
+### 📁 File Upload Demo
+- **URL**: http://localhost/file-upload/
+- **Features**: Drag & drop file upload with progress
+- **Limits**: 10MB per file, 20MB total
+
+### Deployment Commands
+
+```powershell
+# Deploy sample apps to running containers
+.\deploy-apps.bat
+
+# Download additional sample WARs
+.\download-sample-wars.bat
+
+# Manual deployment to specific container
+docker cp yourapp.war tomcat-webapp-1:/usr/local/tomcat/webapps/
+```

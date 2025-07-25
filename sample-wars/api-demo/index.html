@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Demo Application</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #1e3c72 0%, #2a5298 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+        }
+        .api-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .endpoint {
+            background: #ffffff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background: #28a745; color: white; }
+        .post { background: #007bff; color: white; }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #0056b3; }
+        .result {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 API Demo Application</h1>
+            <p>Simple REST API endpoints for testing</p>
+        </div>
+        
+        <div class="content">
+            <div class="api-section">
+                <h3>📡 Available API Endpoints</h3>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <strong>/api-demo/api/time</strong>
+                    <p>Returns current server time in JSON format</p>
+                    <button class="btn" onclick="testEndpoint('/api-demo/api/time')">Test</button>
+                </div>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <strong>/api-demo/api/info</strong>
+                    <p>Returns server information</p>
+                    <button class="btn" onclick="testEndpoint('/api-demo/api/info')">Test</button>
+                </div>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <strong>/api-demo/api/random</strong>
+                    <p>Returns a random number</p>
+                    <button class="btn" onclick="testEndpoint('/api-demo/api/random')">Test</button>
+                </div>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <strong>/api-demo/api/headers</strong>
+                    <p>Returns request headers</p>
+                    <button class="btn" onclick="testEndpoint('/api-demo/api/headers')">Test</button>
+                </div>
+            </div>
+            
+            <div class="api-section">
+                <h3>📊 Test Results</h3>
+                <div id="results" class="result">Click on any endpoint above to test it...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function testEndpoint(url) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                resultsDiv.textContent = `Status: ${response.status}\nResponse:\n${data}`;
+            } catch (error) {
+                resultsDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+        .upload-area.dragover {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .info {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .file-info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e8f5e8;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📁 File Upload Demo</h1>
+        
+        <form action="upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-area" id="uploadArea">
+                <h3>🎯 Drop files here or click to select</h3>
+                <p>Maximum file size: 10MB</p>
+                <input type="file" name="file" id="fileInput" multiple>
+            </div>
+            
+            <div style="text-align: center;">
+                <button type="submit" class="btn">Upload Files</button>
+            </div>
+        </form>
+        
+        <div class="info">
+            <h3>ℹ️ Information</h3>
+            <ul>
+                <li>Maximum file size: 10MB per file</li>
+                <li>Maximum request size: 20MB total</li>
+                <li>Multiple files can be uploaded at once</li>
+                <li>Files are processed server-side using JSP</li>
+            </ul>
+        </div>
+        
+        <div id="fileList"></div>
+    </div>
+    
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            displayFileInfo();
+        });
+        
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', displayFileInfo);
+        
+        function displayFileInfo() {
+            const files = fileInput.files;
+            fileList.innerHTML = '';
+            
+            if (files.length > 0) {
+                const div = document.createElement('div');
+                div.innerHTML = '<h3>📋 Selected Files:</h3>';
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileDiv = document.createElement('div');
+                    fileDiv.className = 'file-info';
+                    fileDiv.innerHTML = `
+                        <strong>${file.name}</strong><br>
+                        Size: ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+                        Type: ${file.type || 'Unknown'}
+                    `;
+                    div.appendChild(fileDiv);
+                }
+                
+                fileList.appendChild(div);
+            }
+        }
+    </script>
+</body>
+</html>
