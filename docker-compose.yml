@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  tomcat:
+    build: .
+    container_name: tomcat-webapp
+    ports:
+      - "8080:8080"
+    environment:
+      - CATALINA_OPTS=-Xmx512m -Xms256m
+    # volumes:
+    #   # Optional: Mount a local directory for webapps
+    #   - ./webapps:/usr/local/tomcat/webapps
+    restart: unless-stopped
