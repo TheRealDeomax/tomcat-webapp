@@ -4,6 +4,9 @@ FROM tomcat:9.0-jdk11-openjdk
 # Maintainer information
 LABEL maintainer="your-email@example.com"
 
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Remove default webapps to clean up
 RUN rm -rf /usr/local/tomcat/webapps/*
 

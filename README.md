@@ -63,4 +63,83 @@ For production:
 - `tomcat-users.xml` - User and role configuration
 - `context.xml` - Manager app access configuration
 - `index.html` - Custom welcome page
-- `docker-compose.yml` - Docker Compose configuration
+- `docker-compose.yml` - Single instance Docker Compose configuration
+- `docker-compose-ha.yml` - High Availability Docker Compose configuration
+- `nginx.conf` - Load balancer configuration
+- `manage-ha.sh` - HA management script (Linux/macOS)
+- `manage-ha.ps1` - HA management script (Windows PowerShell)
+
+## High Availability Setup
+
+For production environments, you can run multiple Tomcat instances behind a load balancer for high availability and better performance.
+
+### Features
+
+- **3 Tomcat instances** running simultaneously
+- **Nginx load balancer** distributing traffic
+- **Health checks** for automatic failover
+- **Auto-restart** if containers fail
+- **Round-robin load balancing**
+
+### Quick Start (HA)
+
+#### Using PowerShell (Windows)
+```powershell
+# Start HA setup
+.\manage-ha.ps1 start
+
+# Check status
+.\manage-ha.ps1 status
+
+# Check health
+.\manage-ha.ps1 health
+
+# Stop HA setup
+.\manage-ha.ps1 stop
+```
+
+#### Using Bash (Linux/macOS)
+```bash
+# Make script executable
+chmod +x manage-ha.sh
+
+# Start HA setup
+./manage-ha.sh start
+
+# Check status
+./manage-ha.sh status
+
+# Check health
+./manage-ha.sh health
+
+# Stop HA setup
+./manage-ha.sh stop
+```
+
+#### Manual Docker Compose
+```bash
+# Start HA setup
+docker compose -f docker-compose-ha.yml up -d --build
+
+# Stop HA setup
+docker compose -f docker-compose-ha.yml down
+```
+
+### HA Access Points
+
+When running the HA setup:
+
+- **Load Balanced App**: http://localhost (port 80)
+- **Load Balanced App**: http://localhost:8080 (port 8080)
+- **Manager App**: http://localhost/manager/html
+- **Host Manager**: http://localhost/host-manager/html
+- **Health Check**: http://localhost/health
+- **Nginx Status**: http://localhost/nginx_status (restricted access)
+
+### Benefits
+
+1. **High Availability**: If one Tomcat instance fails, others continue serving
+2. **Load Distribution**: Traffic is distributed across multiple instances
+3. **Zero Downtime**: Rolling updates possible
+4. **Scalability**: Easy to add more instances
+5. **Health Monitoring**: Automatic health checks and failover

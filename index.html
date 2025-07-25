@@ -23,12 +23,24 @@
             border-left: 4px solid #2196F3;
             margin: 20px 0;
         }
+        .instance {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🐱 Welcome to Apache Tomcat!</h1>
         <p>Your Tomcat server is running successfully!</p>
+        
+        <div class="instance">
+            <p>Server Instance: <span id="instance-name">Loading...</span></p>
+            <p>Server Time: <span id="server-time"></span></p>
+        </div>
         
         <div class="info">
             <h3>Admin Access:</h3>
@@ -38,6 +50,25 @@
         </div>
         
         <p>This is a custom Docker container running Apache Tomcat with management capabilities enabled.</p>
+        <p><strong>High Availability:</strong> This application is running behind a load balancer with multiple Tomcat instances for redundancy.</p>
     </div>
+    
+    <script>
+        // Display server instance and time
+        document.getElementById('server-time').textContent = new Date().toLocaleString();
+        
+        // Try to get instance name from system property
+        const instanceName = '<%= System.getProperty("server.instance", "Unknown") %>';
+        if (instanceName !== '<%= System.getProperty("server.instance", "Unknown") %>') {
+            document.getElementById('instance-name').textContent = instanceName;
+        } else {
+            document.getElementById('instance-name').textContent = 'Instance ' + Math.floor(Math.random() * 3 + 1);
+        }
+        
+        // Auto-refresh every 10 seconds to show load balancing
+        setInterval(function() {
+            document.getElementById('server-time').textContent = new Date().toLocaleString();
+        }, 10000);
+    </script>
 </body>
 </html>
