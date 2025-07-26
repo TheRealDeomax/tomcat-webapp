@@ -24,6 +24,8 @@ services:
     container_name: tomcat-webapp-1
     environment:
       - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat1
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
     restart: unless-stopped
     networks:
       - tomcat-network
@@ -40,6 +42,8 @@ services:
     container_name: tomcat-webapp-2
     environment:
       - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat2
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
     restart: unless-stopped
     networks:
       - tomcat-network
@@ -56,6 +60,8 @@ services:
     container_name: tomcat-webapp-3
     environment:
       - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat3
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
     restart: unless-stopped
     networks:
       - tomcat-network
@@ -65,6 +71,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+# Shared volume for file uploads across all instances
+volumes:
+  shared-uploads:
 
 networks:
   tomcat-network:

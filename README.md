@@ -143,6 +143,16 @@ When running the HA setup:
 3. **Zero Downtime**: Rolling updates possible
 4. **Scalability**: Easy to add more instances
 5. **Health Monitoring**: Automatic health checks and failover
+6. **Shared Storage**: All instances share the same file upload storage
+
+### Shared Volume Configuration
+
+The HA setup uses a shared Docker volume (`shared-uploads`) that is mounted to `/usr/local/tomcat/webapps/file-upload/uploads/` in all Tomcat instances. This means:
+
+- **Consistent File Access**: Files uploaded to any instance are immediately available from all instances
+- **Load Balancer Friendly**: Users can upload to one server and download from another
+- **Data Persistence**: Files survive container restarts and scaling operations
+- **Simplified Management**: Single storage location for all uploaded files
 
 ## Sample Applications
 
@@ -164,8 +174,12 @@ This setup includes several sample WAR applications for testing:
 
 ### 📁 File Upload Demo
 - **URL**: http://localhost/file-upload/
-- **Features**: Drag & drop file upload with progress
+- **Features**: Drag & drop file upload with progress, persistent file storage
 - **Limits**: 10MB per file, 20MB total
+- **Storage**: Files saved to shared volume accessible by all Tomcat instances
+- **Management**: View uploaded files at http://localhost/file-upload/files.jsp
+- **Actions**: Download and delete uploaded files
+- **Shared Storage**: Files uploaded to any instance are visible from all instances
 
 ### Deployment Commands
 
