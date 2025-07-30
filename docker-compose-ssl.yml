@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Load Balancer (Nginx with SSL)
+  nginx:
+    image: nginx:alpine
+    container_name: tomcat-loadbalancer-ssl
+    ports:
+      - "80:80"      # HTTP (redirects to HTTPS)
+      - "443:443"    # HTTPS
+      - "8080:8080"  # HTTP (legacy support)
+    volumes:
+      - ./nginx-ssl.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - tomcat1
+      - tomcat2
+      - tomcat3
+    restart: unless-stopped
+    networks:
+      - tomcat-network
+
+  # Tomcat Instance 1
+  tomcat1:
+    build: .
+    container_name: tomcat-webapp-1
+    environment:
+      - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat1
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
+    restart: unless-stopped
+    networks:
+      - tomcat-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Tomcat Instance 2
+  tomcat2:
+    build: .
+    container_name: tomcat-webapp-2
+    environment:
+      - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat2
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
+    restart: unless-stopped
+    networks:
+      - tomcat-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Tomcat Instance 3
+  tomcat3:
+    build: .
+    container_name: tomcat-webapp-3
+    environment:
+      - CATALINA_OPTS=-Xmx512m -Xms256m -Dserver.instance=tomcat3
+    volumes:
+      - shared-uploads:/usr/local/tomcat/webapps/file-upload/uploads
+    restart: unless-stopped
+    networks:
+      - tomcat-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Shared volume for file uploads across all instances
+volumes:
+  shared-uploads:
+
+networks:
+  tomcat-network:
+    driver: bridge
